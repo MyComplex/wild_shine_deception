@@ -8,7 +8,18 @@ $(function () {
   // function? How can DOM traversal be used to get the "hour-x" id of the
   // time-block containing the button that was clicked? How might the id be
   // useful when saving the description in local storage?
+  let buttons = document.querySelectorAll('.btn');
 
+  buttons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      let fieldset = button.parentNode,
+        textarea = fieldset.querySelector('textarea'),
+        inputItem = textarea.value,
+        inputHour = fieldset.querySelector('div');
+      localStorage.setItem(inputHour.textContent, inputItem);
+    })
+  });
 
   // TODO: Add code to apply the past, present, or future class to each time
   // block by comparing the id to the current hour. HINTS: How can the id
@@ -16,19 +27,19 @@ $(function () {
   // past, present, and future classes? How can Day.js be used to get the
   // current hour in 24-hour time?
   let now = dayjs(),
-    slots = document.querySelectorAll(".row"),
-    hour = dayjs(now).format("H");
+    slots = document.querySelectorAll('.row'),
+    hour = dayjs(now).format('H');
 
   for (let i = 0; i < slots.length; i++) {
     const elms = slots[i].id;
     if (parseInt(elms) < parseInt(hour)) {
-      slots[i].setAttribute("class", "row time-block past");
+      slots[i].setAttribute('class', 'row time-block past');
     }
     if (parseInt(elms) == parseInt(hour)) {
-      slots[i].setAttribute("class", "row time-block present");
+      slots[i].setAttribute('class', 'row time-block present');
     }
     if (parseInt(elms) > parseInt(hour)) {
-      slots[i].setAttribute("class", "row time-block future");
+      slots[i].setAttribute('class', 'row time-block future');
     }
   };
 
@@ -36,9 +47,7 @@ $(function () {
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
 
-
   // TODO: Add code to display the current date in the header of the page.
-
-  let todaysDate = dayjs().format("dddd, MMMM D, YYYY");
-  $("#currentDay").text(todaysDate);
+  let todaysDate = dayjs().format('dddd, MMMM D, YYYY');
+  $('#currentDay').text(todaysDate);
 });
