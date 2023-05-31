@@ -21,31 +21,41 @@ $(function () {
     })
   });
 
+  /* The following jquery works to save the input to local storage, but I can't
+     figure out how to prevent the page from reloading or restore local storage
+     items with jquery so I reverted to query selectors */
+  // $('.btn').click(function () {
+  //   localStorage.setItem($(this).siblings('.hour').text(), $(this).siblings('.description').val());
+  // });
+
   // TODO: Add code to apply the past, present, or future class to each time
   // block by comparing the id to the current hour. HINTS: How can the id
   // attribute of each time-block be used to conditionally add or remove the
   // past, present, and future classes? How can Day.js be used to get the
   // current hour in 24-hour time?
-  let now = dayjs(),
-    slots = document.querySelectorAll('.row'),
-    hour = dayjs(now).format('H');
+  $('.row').each(function () {
+    let slotId = parseInt($(this).attr('id')),
+      now = dayjs(),
+      hour = dayjs(now).format('H');
 
-  for (let i = 0; i < slots.length; i++) {
-    const elms = slots[i].id;
-    if (parseInt(elms) < parseInt(hour)) {
-      slots[i].setAttribute('class', 'row time-block past');
+    if (slotId < hour) {
+      $(this).addClass('past');
     }
-    if (parseInt(elms) == parseInt(hour)) {
-      slots[i].setAttribute('class', 'row time-block present');
+
+    if (slotId == hour) {
+      $(this).addClass('present');
     }
-    if (parseInt(elms) > parseInt(hour)) {
-      slots[i].setAttribute('class', 'row time-block future');
+
+    if (slotId > hour) {
+      $(this).addClass('future');
     }
-  };
+  });
 
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
+  let slots = document.querySelectorAll('.row');
+  
   slots.forEach(slot => {
     let key = slot.querySelector('div'),
       event = slot.querySelector('textarea');
@@ -53,6 +63,5 @@ $(function () {
   });
 
   // TODO: Add code to display the current date in the header of the page.
-  let todaysDate = dayjs().format('dddd, MMMM D, YYYY');
-  $('#currentDay').text(todaysDate);
+  $('#currentDay').text(dayjs().format('dddd, MMMM D'));
 });
